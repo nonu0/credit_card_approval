@@ -1,7 +1,7 @@
 import pandas as pd
 import seaborn as sns
 import numpy as np
-from scipy.stats import skew
+from scipy.stats import skew,chi2_contingency
 import matplotlib.pyplot as plt
 
 app_df = pd.read_csv(r'C:\Users\Administrator\work\credit_card_elig\core\credit_card_approval\data\application_record.csv')
@@ -74,28 +74,42 @@ app_df['Annual Income'] = np.log1p(app_df['Annual Income'])
 # df = credit_df.groupby('ID').agg({'STATUS':['max','min','count'],
 #                                   'MONTHS_BALANCE':'count'}).reset_index()
 begin_month = pd.DataFrame(credit_df.groupby('ID')['MONTHS_BALANCE'].agg('min'))
-begin_month = begin_month.rename(columns={'MONTHS_BALANCE':'Account Age'})
+begin_month = begin_month.rename(columns={'MONTHS_BALANCE':'Account Age'}).abs()
 full_data = pd.merge(app_df,begin_month,how='left',on='ID')
 credit_df['default_value'] = None
 # sss = credit_df['default_value'][credit_df['STATUS'] == '2'] = 'Yes'
 # print(sss.unique())
-# credit_df['default_value'][credit_df['STATUS'] == '2'] = 'Yes'
 credit_df.loc[credit_df['STATUS'].isin(['2','3','4','5']),'default_value'] = 'Yes'
 # print(credit_df['default_value'].value_counts())
 defaulted_count = credit_df.groupby('ID').count()
-defaulted_count.loc[defaulted_count['default_value'] > 0,'default_value'] = 'Yes'
-defaulted_count.loc[defaulted_count['default_value'] == 0, 'default_value'] = 'No'
+defaulted_count['default_value'] = defaulted_count['default_value'].astype(object)
+
+defaulted_count.loc[defaulted_count['default_value'] > 0,'default_value'] = 1 # Yes
+defaulted_count.loc[defaulted_count['default_value'] == 0, 'default_value'] = 0 # No
 default_status = defaulted_count[['default_value']]
-print(default_status)
+# print(default_status)
+full_data_new = pd.merge(full_data,default_status,how='inner',on='ID')
+full_data_new['Is High Risk'] = full_data_new['default_value']
+full_data_new.drop('default_value',axis=1,inplace=True)
+# print(full_data_new)
 
+# pearson_corr = full_data_new[['Occupation','Income Type']].corr(method='pearson')
+# spearman_corr = full_data_new[['Occupation','Income Type']].corr(method='spearman')
 
-# sample_id = credit_df['ID'].sample(1).values[0]
-sample_id = 5001715
-sample_data = credit_df[credit_df['ID'] == sample_id]
-# print(sample_data)
-sns.lineplot(data=sample_data, x='MONTHS_BALANCE',y='STATUS',marker='o')
-plt.title(f'credit history for ID:{sample_id}')
-plt.xlabel('MONTHS_BALANCE')
-plt.ylabel('STATUS')
-# plt.show()
+# print("Pearson Correlation:\n", pearson_corr)
+# print("\nSpearman Correlation:\n", spearman_corr)
+
+def cramer(cat1,cat2):
+    conf_matr = pd.crosstab(cat1,cat2)
+    chi2 = chi2_contingency(conf_matr)[0]
+    n = conf_matr.sum().sum()
+    r,k = conf_matr.shape
+    return np.sqrt(chi2 / (n * (min(r,k) - 1)))
+
+crm = cramer(full_data_new['Occupation'],full_data_new['NAME_HOUSING_TYPE'])
+
+print(crm)
+# print(full_data_new.max(numeric_only=True))
+# full_data_new.loc[]
+
 # app_df.info()

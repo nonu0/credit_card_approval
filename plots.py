@@ -26,3 +26,22 @@ for i, category in enumerate(['Family members','CNT_CHILDREN']):
     # print(app_df.sum())
     for outlier in outliers:
         ax.text(outlier, i, f'{outlier:.1f}', ha='left',va='center',color='red',fontsize=12)
+        
+        
+# sample_id = credit_df['ID'].sample(1).values[0]
+sample_id = 5001715
+sample_data = credit_df[credit_df['ID'] == sample_id]
+# print(sample_data)
+
+sns.lineplot(data=sample_data, x='MONTHS_BALANCE',y='STATUS',marker='o')
+plt.title(f'credit history for ID:{sample_id}')
+plt.xlabel('MONTHS_BALANCE')
+plt.ylabel('STATUS')
+plt.show()
+
+
+# Plot new distribution
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+sns.histplot(application_df["No of Children"], bins=20, kde=True, ax=axes[0])
+sns.histplot(application_df["No of Family members"], bins=20, kde=True, ax=axes[1])
+plt.show()
