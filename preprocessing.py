@@ -44,11 +44,11 @@ def cap_outliers(df, column):
     df[column] = np.where(df[column] > upper_limit,upper_limit,df[column])
     return df
 
-otlier_ch = cap_outliers(application_df,'CNT_CHILDREN')
-otlier_fa = cap_outliers(application_df,'CNT_FAM_MEMBERS')
+outlier_ch = cap_outliers(application_df,'CNT_CHILDREN')
+outlier_fa = cap_outliers(application_df,'CNT_FAM_MEMBERS')
 
-# print(f'children outliers:{otlier_ch}')
-# print(f'children outliers:{otlier_fa}')
+# print(f'children outliers:{outlier_ch}')
+# print(f'children outliers:{outlier_fa}')
 
 application_df['NAME_EDUCATION_TYPE'] = application_df['NAME_EDUCATION_TYPE'].apply(edit_name)
 application_df['NAME_FAMILY_STATUS'] = application_df['NAME_FAMILY_STATUS'].apply(edit_name)
@@ -94,12 +94,8 @@ full_data = pd.merge(combined_df,defaulted_status,how='left',on='ID')
 
 full_data['Is High Risk'] = full_data['defaulted']
 full_data = full_data.drop('defaulted',axis=1)
-print(full_data['Is High Risk'].value_counts())
-# print(ssss)
+# print(full_data['Is High Risk'].value_counts())
+# print(full_data)
 
-# print(combined_df)
-# credit_df['defaulted'] = None
-# credit_df.loc[credit_df['STATUS'].isin('2','3','4','5'),'defaulted'] = 'yes'
-# print(credit_df.info())
 
 

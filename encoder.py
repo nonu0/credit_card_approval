@@ -24,11 +24,13 @@ class CustomEncoder():
         return [self.inverse_classes[label] for label in data]
         
 
-categories = ['dog', 'cat', 'rabbit', 'dog', 'cat', 'rabbit']
+# example use case
+
+# categories = ['dog', 'cat', 'rabbit', 'dog', 'cat', 'rabbit']
 
 # if __name__ == __ma
-encoder = CustomEncoder()
-print(encoder.fit(categories))
-encoded = encoder.transform(categories)
-print(encoded)
-print(encoder.inverse_transform(encoded))
+# encoder = CustomEncoder()
+# print(encoder.fit(categories))
+# encoded = encoder.transform(categories)
+# print(encoded)
+# print(encoder.inverse_transform(encoded))
