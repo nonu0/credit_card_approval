@@ -1,6 +1,6 @@
 from datetime import datetime
-from preprocessing import full_data
-from train_test_split import custom_train_test_split
+from core.credit_card_approval.helper_functions.preprocessing import full_data
+from core.credit_card_approval.helper_functions.train_test_split import custom_train_test_split
 
 from collections import Counter
 

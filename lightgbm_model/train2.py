@@ -1,11 +1,11 @@
 
-from train_test_split import custom_train_test_split
+from core.credit_card_approval.helper_functions.train_test_split import custom_train_test_split
 from sklearn.metrics import precision_recall_curve
 from collections import Counter
 import lightgbm as lgb
 import numpy as np
 
-from preprocessing import full_data
+from core.credit_card_approval.helper_functions.preprocessing import full_data
 
 X = full_data.drop(columns=['Is High Risk'])
 y = full_data['Is High Risk']
