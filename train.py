@@ -23,11 +23,17 @@ params = {
     'objective':'binary',
     'metric':'auc',
     'boosting_type':'gbdt',
-    'learning_rate':0.05,
-    'num_leaves':200,
-    'max_depth':-1,
-    'scale_pos_weight':30,
-    'random_state':42
+    'learning_rate':0.08930127645584529,
+    'num_leaves':64,
+    'max_depth':11,
+    'min_child_samples':46,
+    'min_split_gain':0.2510859852252205,
+    'colsample_bytree':0.9131142068386219,
+    'subsample': 0.3793325893079907,
+    'reg_alpha': 0.376758550961793, 
+    'reg_lambda': 0.1202772045279857,
+    'scale_pos_weight': 15.40489260342057,
+    'random_state':42,
 }
 
 model = lgb.train(params=params,train_set=train_data,valid_sets=test_data,num_boost_round=100)
