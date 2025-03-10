@@ -1,3 +1,4 @@
+from datetime import datetime
 from preprocessing import full_data
 from train_test_split import custom_train_test_split
 
@@ -23,18 +24,19 @@ params = {
     'objective':'binary',
     'metric':'auc',
     'boosting_type':'gbdt',
-    'learning_rate':0.08930127645584529,
-    'num_leaves':64,
-    'max_depth':11,
-    'min_child_samples':46,
-    'min_split_gain':0.2510859852252205,
-    'colsample_bytree':0.9131142068386219,
-    'subsample': 0.3793325893079907,
-    'reg_alpha': 0.376758550961793, 
-    'reg_lambda': 0.1202772045279857,
-    'scale_pos_weight': 15.40489260342057,
+    'learning_rate': 0.06652923282198506,
+    'num_leaves': 130, 
+    'max_depth': 10,
+    'min_child_samples': 14,
+    'min_split_gain': 0.18969158967598235,
+    'colsample_bytree': 0.9535532123159376, 
+    'subsample': 0.27456705520848657, 
+    'reg_alpha': 0.7404069484338288, 
+    'reg_lambda': 0.8874890838479117, 
+    'scale_pos_weight': 40.73474668908436,
     'random_state':42,
-}
+    }
+
 
 model = lgb.train(params=params,train_set=train_data,valid_sets=test_data,num_boost_round=100)
 
@@ -49,9 +51,33 @@ y_pred = (y_pred_proba > 0.5).astype(int)
 # # # Apply new threshold
 # y_pred = (y_pred_proba > best_threshold).astype(int)
 # print(best_threshold)
+timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+auc_score = roc_auc_score(y_test, y_pred_proba)
+conf_matrix = confusion_matrix(y_test, y_pred)
+acc_score = accuracy_score(y_test, y_pred)
+auc_score = auc_score
+class_report = classification_report(y_test, y_pred)
 
+# print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
+# print("Accuracy Score:", accuracy_score(y_test, y_pred))
+# print("ROC-AUC Score:", auc_score)
+# print("Classification Report:\n", classification_report(y_test, y_pred))
 
-print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
-print("Accuracy Score:", accuracy_score(y_test, y_pred))
-print("ROC-AUC Score:", roc_auc_score(y_test, y_pred_proba))
-print("Classification Report:\n", classification_report(y_test, y_pred))
+logfile = r'C:\Users\Administrator\work\credit_card_elig\core\credit_card_approval\metrics\lightGBM_performance.log'
+log_entry = f"""
+Timestamp: {timestamp}
+Model: LightGBM
+Best Hyperparameters: {params}
+Best AUC score on training: {auc_score:.6f}
+
+Test Performance:
+AUC-ROC Score: {auc_score:.6f}
+Accuracy: {acc_score:.6f}
+Classification Report:
+{class_report}
+"""
+# print(log_entry)
+with open(logfile,'a') as f:
+    f.write(log_entry)
+    
+print(f'Model performance logged to {logfile} successfully!')

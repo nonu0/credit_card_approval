@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from sklearn.metrics import roc_curve
 
 
 bins = [0, 1, 2, 3, 4, 5, 6, 7, 8,9,10,11,12,13,14,15,16,17,18,19,20]
@@ -44,4 +45,19 @@ plt.show()
 fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 sns.histplot(application_df["No of Children"], bins=20, kde=True, ax=axes[0])
 sns.histplot(application_df["No of Family members"], bins=20, kde=True, ax=axes[1])
+plt.show()
+
+
+
+# Compute ROC curve
+fpr, tpr, _ = roc_curve(y_test, y_pred_proba)
+
+# Plot ROC curve
+plt.figure(figsize=(8, 6))
+plt.plot(fpr, tpr, label=f'AUC = {auc_score:.4f}', color='blue')
+plt.plot([0, 1], [0, 1], 'k--', label="Random Model")  # Random classifier line
+plt.xlabel("False Positive Rate")
+plt.ylabel("True Positive Rate")
+plt.title("ROC Curve")
+plt.legend()
 plt.show()

@@ -1,9 +1,12 @@
 import optuna
 import lightgbm as lgb
+from sklearn.metrics import roc_auc_score,accuracy_score
+
+from datetime import datetime
 from collections import Counter
+
 from preprocessing import full_data
 from train import train_data,test_data,X_train,X_test,y_train,y_test
-from sklearn.metrics import roc_auc_score
 
 class_counts = Counter(y_train)
 
@@ -44,8 +47,27 @@ def objective(trial):
 
 # Run Optuna optimization
 study = optuna.create_study(direction='maximize')
-study.optimize(objective, n_trials=50)
-
+# study.optimize(objective, n_trials=50)
+best_params = study.best_params
+Auc_score = study.best_value
+accuracy = accuracy_score(y_test,y_pred)
 # Get best hyperparameters
-print("Best params:", study.best_params)
-print("Best AUC score:", study.best_value)
+# print("Best params:", best_params)
+# print("Best AUC score:", study.best_value)
+
+
+# log_filename = 'lightGBM_performance.log'
+# timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+# log_entry = f"""
+# TimeStamp: {timestamp}
+# Model: LightGBM
+# Best HyperParameters: {best_params}
+# Best AUC Score on training: {auc}
+
+# Test Performance:
+# AUC-ROC Score:{Auc_score:.6f}
+# Accuracy: {accuracy:.6f}
+# Classification Report:
+# {classificarion_report(y_test,y_pred)}
+# """
+# # print(log_entry)
