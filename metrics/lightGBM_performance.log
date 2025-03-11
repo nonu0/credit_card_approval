@@ -17,3 +17,41 @@ Classification Report:
    macro avg       0.59      0.64      0.61      7292
 weighted avg       0.97      0.97      0.97      7292
 
+
+Timestamp: 2025-03-10 20:01:55
+Model: LightGBM
+Best Hyperparameters: {'objective': 'binary', 'metric': 'auc', 'boosting_type': 'gbdt', 'learning_rate': 0.06652923282198506, 'num_leaves': 130, 'max_depth': 10, 'min_child_samples': 14, 'min_split_gain': 0.18969158967598235, 'colsample_bytree': 0.9535532123159376, 'subsample': 0.27456705520848657, 'reg_alpha': 0.7404069484338288, 'reg_lambda': 0.8874890838479117, 'scale_pos_weight': 40.73474668908436, 'random_state': 42}
+Best AUC score on training: 0.754653
+
+Test Performance:
+AUC-ROC Score: 0.754653
+Accuracy: 0.966676
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.99      0.98      0.98      7169
+           1       0.19      0.29      0.23       123
+
+    accuracy                           0.97      7292
+   macro avg       0.59      0.64      0.61      7292
+weighted avg       0.97      0.97      0.97      7292
+
+
+Timestamp: 2025-03-10 20:18:44
+Model: LightGBM
+Best Hyperparameters: {'objective': 'binary', 'metric': 'auc', 'boosting_type': 'gbdt', 'learning_rate': 0.06652923282198506, 'num_leaves': 130, 'max_depth': 10, 'min_child_samples': 14, 'min_split_gain': 0.18969158967598235, 'colsample_bytree': 0.9535532123159376, 'subsample': 0.27456705520848657, 'reg_alpha': 0.7404069484338288, 'reg_lambda': 0.8874890838479117, 'scale_pos_weight': 40.73474668908436, 'random_state': 42}
+Best AUC score on training: 0.754653
+
+Test Performance:
+AUC-ROC Score: 0.754653
+Accuracy: 0.966676
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.99      0.98      0.98      7169
+           1       0.19      0.29      0.23       123
+
+    accuracy                           0.97      7292
+   macro avg       0.59      0.64      0.61      7292
+weighted avg       0.97      0.97      0.97      7292
+

@@ -1,7 +1,8 @@
 from datetime import datetime
-from core.credit_card_approval.helper_functions.preprocessing import full_data
-from core.credit_card_approval.helper_functions.train_test_split import custom_train_test_split
+from helper_functions.preprocessing import full_data
+from helper_functions.train_test_split import custom_train_test_split
 
+import joblib
 from collections import Counter
 
 import pandas as pd
@@ -81,3 +82,5 @@ with open(logfile,'a') as f:
     f.write(log_entry)
     
 print(f'Model performance logged to {logfile} successfully!')
+
+# joblib.dump(model,'lightgbm_credit_card_approval.pkl')
