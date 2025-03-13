@@ -50,7 +50,7 @@ study = optuna.create_study(direction='maximize')
 # study.optimize(objective, n_trials=50)
 best_params = study.best_params
 Auc_score = study.best_value
-accuracy = accuracy_score(y_test,y_pred)
+# accuracy = accuracy_score(y_test,y_pred)
 # Get best hyperparameters
 # print("Best params:", best_params)
 # print("Best AUC score:", study.best_value)

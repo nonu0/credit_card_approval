@@ -1,95 +1,63 @@
-from helper_functions.preprocessing import full_data
-from helper_functions.train_test_split import custom_train_test_split
-
-from collections import Counter
-
-import pandas as pd
 import xgboost as xgb
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import roc_auc_score,accuracy_score,classification_report,balanced_accuracy_score,cohen_kappa_score,log_loss
-from imblearn.over_sampling import SMOTE
+from sklearn.metrics import roc_auc_score,accuracy_score,balanced_accuracy_score,classification_report
+
+from datetime import datetime
+import joblib
+
+from xgboost_model.optuna_optimization import X_train_smote,X_test_smote,y_train,y_test
+
+timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+params = {
+    'learning_rate': 0.1040275387678505, 
+    'n_estimators': 339,
+    'max_depth': 4,
+    'min_child_weight': 7, 
+    'gamma': 4.09616589780161,
+    'subsample': 0.8628345990575292, 
+    'colsample_bytree': 0.537160980152967, 
+    'reg_lambda': 0.7535887845167186, 
+    'reg_alpha': 0.006751151129803729,
+    'scale_pos_weight': 52.63966167633958
+    }
 
 
-full_data.drop(columns=['ID'],inplace=True)
-
-label_encode_cols = ['FLAG_OWN_CAR', 'Job', 'Education', 'FLAG_OWN_REALTY']
-onehot_encode_cols = ['Gender', 'Housing', 'Occupation', 'Family Status']
-
-X = full_data.drop(columns=['Is High Risk'])
-y = full_data['Is High Risk']
-
-X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2)
-
-label_encoders = {}
-for col in label_encode_cols:
-    le = LabelEncoder()
-    X_train[col] = le.fit_transform(X_train[col])
-    X_test[col] = le.fit_transform(X_test[col])
-    label_encoders[col] = le
-    
-X_train = pd.get_dummies(X_train,columns=onehot_encode_cols,drop_first=True)
-X_test = pd.get_dummies(X_test,columns=onehot_encode_cols,drop_first=True)
-X_test = X_test.reindex(columns=X_train.columns,fill_value=0)
-# print(X_train.columns)
-# print(X_test)
-
-xgb_model = xgb.XGBClassifier(
-    learning_rate=0.089,
-    max_depth=11,
-    n_estimators=100,
-    subsample=0.38,
-    colsample_bytree=0.91,
-    reg_alpha=0.37,
-    reg_lambda=0.12,
-    scale_pos_weight=15.40,
-    # use_label_encoder=False,
-    eval_metric="auc"
-)
-
-smote = SMOTE(random_state=42)
-X_train_res,y_train_res = smote.fit_resample(X_train,y_train)
-
-xgb_model.fit(X_train,y_train)
-# xgb_model.fit(X_train_res,y_train_res)
-y_pred_proba = xgb_model.predict_proba(X_test)[:,1]
-# print(y_pred_proba[:50])
+model = xgb.XGBClassifier(**params)
+model.fit(X_train_smote,y_train)
+y_pred_proba = model.predict(X_test_smote)
 y_pred = (y_pred_proba >= 0.5).astype(int)
-# print(xgb_model.score(X_test,y_test))
+
+# print(full_data['Family Status'].value_counts())
+print(model.score(X_test_smote,y_test))
 # print(xgb_model.get_params())
 
-# auc = roc_auc_score(y_test,y_pred_proba)
+auc = roc_auc_score(y_test,y_pred_proba)
 accuracy = accuracy_score(y_test,y_pred)
 
-# balanced_acc = balanced_accuracy_score(y_test, y_pred)
-# print(f"Balanced Accuracy: {balanced_acc:.4f}")
+balanced_acc = balanced_accuracy_score(y_test, y_pred)
+print(f"Balanced Accuracy: {balanced_acc:.4f}")
 
+class_report = classification_report(y_test, y_pred)
 
-# print(f"XGBoost AUC-ROC: {auc:.4f}")
-# print(f"XGBoost Accuracy: {accuracy:.4f}")
-# print("XGBoost Classification Report:\n", classification_report(y_test, y_pred))
+print(f"XGBoost AUC-ROC: {auc:.4f}")
+print(f"XGBoost Accuracy: {accuracy:.4f}")
+print("XGBoost Classification Report:\n", classification_report(y_test, y_pred))
 
-import matplotlib.pyplot as plt
-import numpy as np
+logfile = r'C:\Users\Administrator\work\credit_card_elig\core\credit_card_approval\metrics\XGBoost_performance.log'
+log_entry = f"""
+Timestamp: {timestamp}
+Model: XGBoost
+Best Hyperparameters: {params}
+Best AUC score on training: {auc:.6f}
 
-feat_imp = xgb_model.feature_importances_
-feature_names = X_train.columns
-sorted_idx = np.argsort(feat_imp)
-print(full_data['Occupation'].value_counts())
+Test Performance:
+AUC-ROC Score: {auc:.6f}
+Accuracy: {accuracy:.6f}
+Classification Report:
+{class_report}
+"""
 
-plt.figure(figsize=(10,6))
-plt.barh(feature_names[sorted_idx],feat_imp[sorted_idx],color='blue')
-plt.xlabel('Feature importance')
-plt.ylabel('Feature names')
-# plt.show()
-
-# kappa = cohen_kappa_score(y_test, y_pred)
-# print(f"Cohen’s Kappa Score: {kappa:.4f}")
-
-# logloss = log_loss(y_test, y_pred_proba)
-# print(f"Log Loss: {logloss:.4f}")
-
-# # print('original',(X_train))
-
-
-# # print("Resampled class distribution:", (x_train_smote))
+with open(logfile,'a') as f:
+    f.write(log_entry)
+    
+joblib.dump(model,'xgboost_credit_card_approval.pkl')

@@ -61,3 +61,10 @@ plt.ylabel("True Positive Rate")
 plt.title("ROC Curve")
 plt.legend()
 plt.show()
+
+
+plt.figure(figsize=(10,6))
+plt.barh(feature_names[sorted_idx],feat_imp[sorted_idx],color='blue')
+plt.xlabel('Feature importance')
+plt.ylabel('Feature names')
+plt.show()
