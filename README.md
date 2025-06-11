@@ -1,9 +1,7 @@
 ```markdown
 # Credit Card Approval Prediction with LightGBM and XGBoost
 
-This project is a machine learning pipeline for predicting credit card approvals using structured data from application and credit records. 
-It leverages two state-of-the-art gradient boosting frameworks—**LightGBM** and **XGBoost**—with hyperparameter optimization via **Optuna**, 
-detailed preprocessing utilities, and rich performance tracking.
+This project is a machine learning pipeline for predicting credit card approvals using structured data from application and credit records. It leverages two state-of-the-art gradient boosting frameworks—**LightGBM** and **XGBoost**—with hyperparameter optimization via **Optuna**, detailed preprocessing utilities, and rich performance tracking.
 
 ---
 
