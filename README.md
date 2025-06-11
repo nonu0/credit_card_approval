@@ -9,33 +9,6 @@ detailed preprocessing utilities, and rich performance tracking.
 
 ## 📁 Project Structure
 
-```
-├── analysis/                  # EDA visualizations (boxplots, histograms, line plots)
-├── data/                      # Raw datasets
-│   ├── application\_record.csv
-│   └── credit\_record.csv
-├── helper\_functions/         # Custom preprocessing and utilities
-│   ├── encoder.py
-│   ├── preprocessing.py
-│   └── train\_test\_split.py
-├── lightgbm\_model/           # LightGBM training, tuning and evaluation
-│   ├── final\_train.py
-│   ├── train2.py
-│   ├── optuna\_optimization.py
-│   └── testing.py
-├── xgboost\_model/            # XGBoost pipeline
-│   ├── learning.py
-│   ├── train.py
-│   ├── test.py
-│   ├── optuna\_optimization.py
-│   └── main.py
-├── metrics/                  # Model performance logs
-│   ├── XGBoost\_performance.log
-│   └── lightGBM\_performance.log
-└── README.md                 # Project documentation
-
-````
-
 ---
 
 ## 🧠 Objective
