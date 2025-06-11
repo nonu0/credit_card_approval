@@ -5,7 +5,7 @@ from collections import Counter
 import lightgbm as lgb
 import numpy as np
 
-from core.credit_card_approval.helper_functions.preprocessing import full_data
+from core.credit_card_approval.preprocessing import full_data
 
 X = full_data.drop(columns=['Is High Risk'])
 y = full_data['Is High Risk']

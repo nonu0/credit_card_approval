@@ -5,7 +5,7 @@ from sklearn.metrics import roc_auc_score,accuracy_score
 from datetime import datetime
 from collections import Counter
 
-from core.credit_card_approval.helper_functions.preprocessing import full_data
+from core.credit_card_approval.preprocessing import full_data
 from core.credit_card_approval.train import train_data,test_data,X_train,X_test,y_train,y_test
 
 class_counts = Counter(y_train)

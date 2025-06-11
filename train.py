@@ -4,7 +4,7 @@ from sklearn.metrics import roc_auc_score,accuracy_score,balanced_accuracy_score
 from datetime import datetime
 import joblib
 
-from xgboost_model.optuna_optimization import X_train_smote,X_test_smote,y_train,y_test
+from core.credit_card_approval.optuna_optimization import X_train_smote,X_test_smote,y_train,y_test
 
 timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 

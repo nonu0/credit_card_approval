@@ -1,5 +1,5 @@
 from datetime import datetime
-from helper_functions.preprocessing import full_data
+from core.credit_card_approval.preprocessing import full_data
 from helper_functions.train_test_split import custom_train_test_split
 
 import joblib
@@ -20,6 +20,7 @@ X_train,X_test,y_train,y_test = custom_train_test_split(X,y,test_size=0.2,random
 train_data = lgb.Dataset(X_train,label=y_train)
 test_data = lgb.Dataset(X_test,y_test)
 
+# begin with random params then use optuna's
 
 params = {
     'objective':'binary',
